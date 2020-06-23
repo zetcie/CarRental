@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <div class="p-3 alert alert-success">
+        <h3 class="display-3">Witaj <span th:text="${user}"></span>!</h3>
+        <hr>
+        <p class="lead">
+            Twoje konto zostało pomyślnie utworzone.
+        </p>
+    </div>
+</div>
+</body>
+</html>

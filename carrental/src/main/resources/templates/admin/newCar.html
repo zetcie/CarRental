@@ -1,0 +1,87 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <th:block th:insert="admin/cars :: manage_header">Menu</th:block>
+    <div class="alert alert-danger" th:if="${error}">
+        <p>Wystapił błąd podczas tworzenia marki. </p>
+        <p th:text="${error}">
+        </p>
+    </div>
+    <h3 class="display-3">Nowy samochód</h3>
+    <form action="#" th:action="@{/admin/cars}" th:object="${car}" method="post">
+        <div class="form-group">
+            <label for="name">Model</label>
+            <input type="text" class="form-control" th:field="*{model}" name="name" id="name" placeholder="Nazwa">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('model')}" th:errors="*{model}">Błąd nazwy</div>
+        </div>
+        <div class="form-group">
+            <label for="brand">Marka</label>
+            <select class="form-control" id="brand" name="brand" th:field="*{brand}">
+                <th:block th:each="option : ${allBrands}">
+                    <option th:value="${option.id}" th:text="${option.name}"></option>
+                </th:block>
+            </select>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('brand')}" th:errors="*{name}">Błąd marki</div>
+        </div>
+        <div class="form-group">
+            <label for="brand">Koszt</label>
+            <input type="number" class="form-control" id="cost" name="brand" th:field="*{dailyCost}">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('dailyCost')}" th:errors="*{dailyCost}">Błąd ceny</div>
+        </div>
+        <div class="form-group col">
+            <label for="carType">Typ samochodu</label>
+            <select class="form-control" id="carType" name="carType" th:field="*{carType}">
+                <option value="SMALL">Mały</option>
+                <option value="MEDIUM">Średni</option>
+                <option value="LARGE">Duży</option>
+                <option value="KOMBI">Kombi</option>
+                <option value="PREMIUM">Premium</option>
+                <option value="FAMILY">Rodzinny</option>
+                <option value="SUV">SUV</option>
+            </select>
+        </div>
+        <div class="form-group col">
+            <label for="seats">Ilość siedzeń</label>
+            <select class="form-control" id="seats" name="seatsCount" th:field="*{seatsCount}">
+                <th:block th:each="option : ${possibleSeatsCount}">
+                    <option th:value="${option}" th:text="${option}"></option>
+                </th:block>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="doors">Ilość drzwi</label>
+            <select class="form-control" id="doors" name="doorsCount" th:field="*{doorsCount}">
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="cooling">Z klimatyzacją?</label>
+            <select class="form-control" id="cooling" name="hasCoolingSystem" th:field="*{hasCoolingSystem}">
+                <option value="true">Tak</option>
+                <option value="false">Nie</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="transmission">Typ skrzyni biegów</label>
+            <select class="form-control" id="transmission" name="transmissionType" th:field="*{transmissionType}">
+                <option value="MANUAL">Manualna</option>
+                <option value="AUTOMATIC">Automatyczna</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Stwórz</button>
+    </form>
+</div>
+<script>
+    $(document).ready(
+        function () {
+            $('#newCar').toggleClass('active');
+        }
+    );
+</script>
+</body>
+</html>

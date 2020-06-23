@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <th:block th:insert="admin/cars :: manage_header">Menu</th:block>
+    <div class="alert alert-danger" th:if="${error}">
+        <p>Wystapił błąd podczas tworzenia marki. </p>
+        <p th:text="${error}">
+        </p>
+    </div>
+    <h3 class="display-3">Nowa marka</h3>
+    <form action="#" th:action="@{/admin/brands}" th:object="${brand}" method="post">
+        <div class="form-group">
+            <label for="name">Nazwa</label>
+            <input type="text" class="form-control" th:field="*{name}" name="name" id="name" placeholder="Nazwa">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błąd marki</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Stwórz</button>
+    </form>
+</div>
+<script>
+    $(document).ready(
+        function () {
+            $('#newBrand').toggleClass('active');
+        }
+    );
+</script>
+</body>
+</html>

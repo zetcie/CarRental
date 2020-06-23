@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <th:block th:fragment="manage_header">
+        <h3 class="display-4">Zarządzaj samochodami</h3>
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline">
+                <div class="col m-1">
+                    <a class="btn btn-outline-dark btn-sm" id="allBrands" th:href="@{/admin/brands/}">
+                        Wszystkie marki
+                    </a>
+                </div>
+                <div class="col m-1" >
+                    <a class="btn btn-outline-dark btn-sm" th:href="@{/admin/cars/all}" id="allCars">
+                        Wszystkie samochody
+                    </a>
+                </div>
+                <div class="col m-1" >
+                    <a class="btn btn-outline-dark btn-sm" id="newBrand" th:href="@{/admin/brands/new}">
+                        Nowa marka
+                    </a>
+                </div>
+                <div class="col m-1" >
+                    <a class="btn btn-outline-dark btn-sm" id="newCar" th:href="@{/admin/cars/new}">
+                        Nowe auto
+                    </a>
+                </div>
+            </form>
+        </nav>
+    </th:block>
+</div>
+</body>
+</html>

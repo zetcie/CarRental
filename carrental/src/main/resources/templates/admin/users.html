@@ -1,0 +1,116 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <th:block th:if="${(users != null) && (!users.isEmpty())}">
+        <h3 class="display-4">Lista użytkowników</h3>
+        <table class="table" id="users-table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Login</th>
+                <th scope="col">Email</th>
+                <th scope="col">Data rejestracji</th>
+                <th scope="col">Zaktualizowano</th>
+                <th scope="col">Edytuj</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <th scope="row" th:text="${user.id}">User ID</th>
+                <td th:text="${user.login}">User login</td>
+                <td th:text="${user.email}">User email</td>
+                <td th:text="${user.createdDate}">Created time</td>
+                <td th:text="${user.updatedDate}">Updated time</td>
+                <td>
+                    <button class="btn btn-sm btn-danger" th:if="${user.enabled}"
+                            th:onclick="'disableUser(\'' + ${user.id} + '\');'">
+                        Zablokuj użytkownika
+                    </button>
+                    <button class="btn btn-sm btn-success" th:if="${!user.enabled}"
+                            th:onclick="'enableUser(\'' + ${user.id} + '\');'">
+                        Odblokuj użytkownika
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <th:block th:if="${(users == null) || (users.isEmpty())}">
+        <p class="lead">Nie znaleziono żadnych użytkowników</p>
+    </th:block>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Czy potwierdzasz?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Czy potwierdzasz operację?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Nie</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="currentFunction()">Tak
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(
+        function () {
+            $('#users-table').DataTable();
+        }
+    );
+
+    var currentObject = null;
+
+    var currentFunction = function () {
+
+    };
+
+
+    function disableUser(userId) {
+        currentObject = userId;
+        currentFunction = function () {
+            $.post("/admin/users/disable",
+                {
+                    id: userId
+                },
+                function (data, status) {
+                    if (status === 'success') {
+                        alert('Zablokowano użytkownika');
+                        window.location = window.location;
+                    }
+                });
+        };
+        $('#confirm').modal();
+    }
+
+    function enableUser(userId) {
+        currentObject = userId;
+        currentFunction = function () {
+            $.post("/admin/users/enable",
+                {
+                    id: userId
+                },
+                function (data, status) {
+                   if (status === 'success') {
+                       alert('Odblokowano użytkownika');
+                       window.location = window.location;
+                   }
+                });
+        };
+        $('#confirm').modal();
+    }
+</script>
+</body>
+</html>

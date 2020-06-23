@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+        <th:block th:if="${(cars != null) && (!cars.isEmpty())}">
+            <h3 class="display-4">Wyniki wyszukiwania:</h3>
+            <table class="table" id="results">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Marka</th>
+                        <th>Model</th>
+                        <th>Posiada klimatyzację?</th>
+                        <th>Typ skrzyni</th>
+                        <th>Ilość siedzeń</th>
+                        <th>Ilość drzwi</th>
+                        <th>Cena za dzień</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="car : ${cars}">
+                        <th th:text="${car.id}">Car ID</th>
+                        <td th:text="${car.brand.name}">Car brand</td>
+                        <td th:text="${car.model}">Car model</td>
+                        <td th:text="${car.hasCoolingSystem ? 'Tak' : 'Nie'}">Has cooling</td>
+                        <td th:text="${car.transmissionType.name().equals('AUTOMATIC') ? 'Automatyczna' : 'Manualna'}">
+                            Transmission
+                        </td>
+                        <td th:text="${car.seatsCount}"></td>
+                        <td th:text="${car.doorsCount}"></td>
+                        <td th:text="${car.dailyCost}"></td>
+                        <td>
+                            <a th:href="@{/client/rent/{carId}(carId=${car.id})}" class="btn btn-sm btn-warning">
+                                Wynajmij!
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </th:block>
+        <th:block th:if="${(cars == null) || (cars.isEmpty())}">
+            <p class="lead">Nie znaleziono samochodów o podanych parametrach</p>
+            <a th:href="@{/}">Wróć na stronę główną</a>.
+        </th:block>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#results').DataTable();
+    });
+</script>
+</body>
+</html>

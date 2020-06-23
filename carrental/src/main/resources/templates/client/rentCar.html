@@ -1,0 +1,101 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <div class="alert alert-danger" th:if="${error}">
+        <p>Wystapił błąd podczas tworzenia rezerwacji. </p>
+        <p th:text="${error}">
+        </p>
+    </div>
+    <h3 class="display-3">Wynajmij samochód
+        <span th:text="${car.brand.name}"></span> - <span th:text="${car.model}"></span></h3>
+    <div class="alert alert-warning">
+        Kliknij dwukrotnie na dzień, żeby wybrać pojedynczą datę zamiast przedziału.
+    </div>
+    <div id="startDate">
+        <div class="navigation">
+            <button class="prev btn-sm btn-success">Poprzedni</button>
+            <div class="period"></div>
+            <button class="next btn-sm btn-success">Następny</button>
+        </div>
+        <div class="week"></div>
+        <div class="month"></div>
+    </div>
+    <span class="lead">
+        Łączny koszt: <span class="text-bold" id="cost"></span>
+    </span>
+    <form th:action="@{/client/rent}" method="post">
+        <input type="hidden" id="startDateInput" name="startDate">
+        <input type="hidden" id="baseCost" th:value="${car.dailyCost}">
+        <input type="hidden" id="endDateInput" name="endDate">
+        <input type="hidden" id="carId" name="carId" th:value="${car.id}">
+        <input type="hidden" id="totalCost" name="totalCost" th:value="${car.id}">
+        <button type="submit" class="btn btn-primary">
+            Stwórz rezerwację
+        </button>
+    </form>
+</div>
+<script th:src="@{/rentCar.js}">
+</script>
+<script>
+    var toggleCalendar = function (id, cost) {
+        $.get("/client/rent/days/" + id,
+            function (data, status) {
+                console.log(data);
+                console.log(status);
+                if (status === 'success') {
+                    const dateSpan = new HelloWeek({
+                        selector: '#startDate',
+                        lang: 'pl',
+                        langFolder: '/langs/',
+                        format: 'DD/MM/YYYY',
+                        weekShort: true,
+                        monthShort: false,
+                        multiplePick: false,
+                        defaultDate: new Date(),
+                        todayHighlight: true,
+                        disablePastDays: true,
+                        disabledDaysOfWeek: [0, 6],
+                        disableDates: data,
+                        weekStart: 0, // week start on Sunday
+                        daysHighlight: null,
+                        daysSelected: null,
+                        range: true,
+                        rtl: false,
+                        locked: false,
+                        minDate: new Date(),
+                        maxDate: null,
+                        nav: ['◀', '▶'],
+                        onLoad: function () {
+
+                        },
+                        onChange: function () {
+
+                        },
+                        onSelect: function () {
+                            $('#startDateInput').val(
+                                dateSpan.daysSelected[0]
+                            );
+                            $('#endDateInput').val(
+                                dateSpan.daysSelected[dateSpan.daysSelected.length - 1]
+                            );
+                            $("#cost").html(
+                                dateSpan.daysSelected.length * cost
+                            );
+                        },
+                        onClear: function () {
+
+                        }
+                    });
+                }
+            });
+    }
+
+    $(document).ready(function () {
+        toggleCalendar($('#carId').val(), $('#baseCost').val());
+    })
+</script>
+</body>
+</html>

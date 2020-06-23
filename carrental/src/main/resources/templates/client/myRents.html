@@ -1,0 +1,178 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/standardImports :: headerfiles"></th:block>
+    <style>
+        .hidden {
+            display: none;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <th:block th:if="${(rents != null) && (!rents.isEmpty())}">
+                <h3 class="display-4">Moje wypożyczenia</h3>
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Samochód</th>
+                        <th scope="col">Data początkowa</th>
+                        <th scope="col">Data końca</th>
+                        <th scope="col">Koszt</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rent : ${rents}">
+                        <th scope="row" th:text="${rent.id}">Request Id</th>
+                        <td>
+                            <span th:text="${rent.car.brand.name}"></span> <span th:text="${rent.car.model}"></span>
+                        </td>
+                        <td th:text="${rent.startDate}">Start date</td>
+                        <td th:text="${rent.endDate}">End date</td>
+                        <td class="rentsCost" th:text="${rent.totalCost}">Cost</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p id="fullRentsCostText" class="lead hidden">Pełny koszt: <span id="fullRentsCost"></span></p>
+            </th:block>
+            <th:block th:if="${(rents == null) || (rents.isEmpty())}">
+                <p class="lead">Nie znaleziono żadnych wypożyczeń</p>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <th:block th:if="${(requests != null) && (!requests.isEmpty())}">
+                <h3 class="display-4">Lista prośb o wypozyczenie</h3>
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Samochód</th>
+                        <th scope="col">Data początkowa</th>
+                        <th scope="col">Data końca</th>
+                        <th scope="col">Koszt</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="req : ${requests}">
+                        <th scope="row" th:text="${req.id}">Request Id</th>
+                        <td>
+                            <span th:text="${req.car.brand.name}"></span> <span th:text="${req.car.model}"></span>
+                        </td>
+                        <td th:text="${req.startDate}">Start date</td>
+                        <td th:text="${req.endDate}">End date</td>
+                        <td class="rentRequestsCost" th:text="${req.totalCost}">Cost</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p id="fullRentRequestsCostText" class="lead hidden">Pełny koszt: <span id="fullRentRequestsCost"></span></p>
+            </th:block>
+            <th:block th:if="${(requests == null) || (requests.isEmpty())}">
+                <p class="lead">Nie znaleziono żadnych prośb</p>
+            </th:block>
+        </div>
+    </div>
+
+</div>
+<!-- Modal -->
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Czy potwierdzasz?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Czy potwierdzasz operację?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Nie</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="currentFunction()">Tak
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(
+        function () {
+            $('#allCars').toggleClass('active');
+            let rentRequestsCost = $('.rentRequestsCost');
+            let rentsCost = $('.rentsCost');
+            let rentsCostNum = 0.0;
+            let rentRequestsCostNum = 0.0;
+
+            rentRequestsCost.each(
+                function () {
+                    rentRequestsCostNum += parseFloat($(this)[0].innerText);
+                }
+            );
+            if (rentRequestsCostNum > 0) {
+                $('#fullRentRequestsCostText').removeClass('hidden');
+                $('#fullRentRequestsCost').text(rentRequestsCostNum);
+            }
+
+            rentsCost.each(
+                function () {
+                    rentsCostNum += parseFloat($(this)[0].innerText);
+                }
+            );
+            if (rentsCostNum > 0) {
+                $('#fullRentsCostText').removeClass('hidden');
+                $('#fullRentsCost').text(rentsCostNum);
+            }
+        }
+    );
+
+    var currentObject = null;
+
+    var currentFunction = function () {
+
+    };
+
+
+    function disableCar(carId) {
+        currentObject = carId;
+        currentFunction = function () {
+            $.post("/admin/cars/disable",
+                {
+                    id: carId
+                },
+                function (data, status) {
+                    if (status === 'success') {
+                        alert('Zablokowano samochód');
+                        window.location = window.location;
+                    }
+                });
+        };
+        $('#confirm').modal();
+    }
+
+    function enableCar(carId) {
+        currentObject = carId;
+        currentFunction = function () {
+            $.post("/admin/cars/enable",
+                {
+                    id: carId
+                },
+                function (data, status) {
+                   if (status === 'success') {
+                       alert('Odblokowano samochód');
+                       window.location = window.location;
+                   }
+                });
+        };
+        $('#confirm').modal();
+    }
+</script>
+</body>
+</html>

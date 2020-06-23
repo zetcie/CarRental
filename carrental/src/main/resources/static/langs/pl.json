@@ -1,0 +1,50 @@
+{
+  "days": [
+    "Nie",
+    "Pon",
+    "Wt",
+    "Śr",
+    "Czw",
+    "Pią",
+    "Sob"
+  ],
+  "daysShort": [
+    "Nd",
+    "Pn",
+    "Wt",
+    "Śr",
+    "Cz",
+    "Pt",
+    "Sb"
+  ],
+  "months": [
+    "Styczeń",
+    "Luty",
+    "Marzec",
+    "Kwiecień",
+    "Maj",
+    "Czerwiec",
+    "Lipiec",
+    "Sierpień",
+    "Wrzesień",
+    "Październik",
+    "Listopad",
+    "Grudzień"
+  ],
+  "monthsShort": [
+    "St",
+    "Lut",
+    "Mar",
+    "Kwi",
+    "Maj",
+    "Cze",
+    "Lip",
+    "Sie",
+    "Wrz",
+    "Paź",
+    "Lis",
+    "Gru"
+  ],
+  "today": "Dzisiaj",
+  "clear": "Wyczyść"
+}

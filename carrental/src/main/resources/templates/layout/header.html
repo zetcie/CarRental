@@ -1,0 +1,30 @@
+<ul class="nav nav-tabs mb-2" th:fragment="header"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <li class="nav-item">
+        <a class="nav-link" th:href="@{/}">Strona główna</a>
+    </li>
+    <li class="nav-item" sec:authorize="isAnonymous()">
+        <a class="nav-link" th:href="@{/register}">Załóż konto</a>
+    </li>
+    <li class="nav-item" sec:authorize="isAnonymous()">
+        <a class="nav-link" th:href="@{/login}">Zaloguj się</a>
+    </li>
+    <li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link btn btn-sm btn-success" th:href="@{/client/rent/my}">Moje wypożyczenia</a>
+    </li>
+    <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_EMPLOYEE')">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+           role="button" aria-haspopup="true" aria-expanded="false">Zarządzaj</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" th:href="@{/admin/users}">Użytkownicy</a>
+            <a class="dropdown-item" th:href="@{/admin/cars}">Samochody</a>
+            <a class="dropdown-item" th:href="@{/admin/rents}">Wypożyczenia</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" th:href="@{/admin/stats}">Zobacz statystyki</a>
+        </div>
+    </li>
+    <li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link text-danger" th:href="@{/logout}">Wyloguj się</a>
+    </li>
+</ul>

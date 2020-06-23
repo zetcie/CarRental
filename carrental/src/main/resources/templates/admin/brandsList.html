@@ -1,0 +1,50 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <th:block th:insert="admin/cars :: manage_header">Menu</th:block>
+    <div class="alert alert-success" th:if="${newBrand}">
+        Dodano nową markę samochodu.
+    </div>
+        <th:block th:if="${(brands != null) && (!brands.isEmpty())}">
+            <h3 class="display-4">Lista marek</h3>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Data dodania</th>
+                    <th scope="col">Edytuj</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="brand : ${brands}">
+                    <th scope="row" th:text="${brand.id}">Brand ID</th>
+                    <td th:text="${brand.name}">Brand Name</td>
+                    <td th:text="${brand.createdDate}">Created date</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger">
+                            Usuń
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </th:block>
+        <th:block th:if="${(brands == null) || (brands.isEmpty())}">
+            <p class="lead">Nie znaleziono żadnych marek</p>
+            <a th:href="@{/admin/brands/new}">Dodaj nową</a>.
+        </th:block>
+</div>
+<script>
+    $(document).ready(
+        function () {
+            $('#allBrands').toggleClass('active');
+        }
+    );
+</script>
+</body>
+</html>

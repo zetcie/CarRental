@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/standardImports :: headerfiles">
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+<div class="container">
+    <th:block th:if="${(rents != null) && (!rents.isEmpty())}">
+        <h3 class="display-4">Lista wynajęć dla
+            <span th:text="${car.brand.name}"></span> <span th:text="${car.model}"></span>
+        </h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Użytkownik</th>
+                <th scope="col">Data wynajęcia</th>
+                <th scope="col">Data oddania</th>
+                <th scope="col">Koszt</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rent : ${rents}">
+                <td th:text="${rent.id}"></td>
+                <td>
+                    <a th:href="@{/admin/user/{id}(id=${rent.systemUser.id})}">
+                        <span th:text="${rent.systemUser.login}"></span>
+                    </a>
+                </td>
+                <td th:text="${rent.startDate}">Rent start date</td>
+                <td th:text="${rent.endDate}">Rent end date</td>
+                <td th:text="${rent.totalCost}">Cost</td>
+            </tr>
+            </tbody>
+        </table>
+    </th:block>
+    <th:block th:if="${(rents == null) || (rents.isEmpty())}">
+        <p class="lead">Nie znaleziono żadnych wynajęć</p>
+    </th:block>
+</div>
+</body>
+</html>

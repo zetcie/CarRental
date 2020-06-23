@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="layout/standardImports :: headerfiles">
+    </th:block>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+</head>
+<body>
+<div th:insert="layout/header :: header">Menu</div>
+Podaj ile dni wstecz chcesz oglądać statystyki
+<input type="number" value="7" placeholder="Ilość dni" id="days">
+<button class="btn btn-success" onclick="initStats($('#days').val())">Sprawdź</button>
+<div class="container">
+    <canvas id="rentRequests" width="400" height="400"></canvas>
+    <canvas id="rents" width="400" height="400"></canvas>
+</div>
+<script th:src="@{/statsInitScript.js}">
+</script>
+</body>
+</html>

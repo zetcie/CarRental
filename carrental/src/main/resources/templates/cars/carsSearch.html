@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<form method="get" th:action="@{/cars}">
+    <div class="row">
+        <div class="form-group col">
+            <label for="brandId">Marka samochodu</label>
+            <select multiple class="form-control" id="brandId" name="brandId">
+                <option selected value="">Nieistotne</option>
+                <th:block th:each="option : ${brands}">
+                    <option th:value="${option.id}" th:text="${option.name}"></option>
+                </th:block>
+            </select>
+        </div>
+        <div class="form-group col">
+            <label for="carType">Typ samochodu</label>
+            <select multiple class="form-control" id="carType" name="carType">
+                <option selected value="">Nieistotne</option>
+                <option value="SMALL">Mały</option>
+                <option value="MEDIUM">Średni</option>
+                <option value="LARGE">Duży</option>
+                <option value="KOMBI">Kombi</option>
+                <option value="PREMIUM">Premium</option>
+                <option value="FAMILY">Rodzinny</option>
+                <option value="SUV">SUV</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col">
+            <label for="seats">Ilość siedzeń</label>
+            <select multiple class="form-control" id="seats" name="seatsCount">
+                <option selected value="">Nieistotne</option>
+                <th:block th:each="option : ${possibleSeatsCount}">
+                    <option th:value="${option}" th:text="${option}"></option>
+                </th:block>
+            </select>
+        </div>
+        <div class="form-group col">
+            <label for="doors">Ilość drzwi</label>
+            <select multiple class="form-control" id="doors" name="doorsCount">
+                <option selected value="">Nieistotne</option>
+                <option>3</option>
+                <option>5</option>
+                <option>7</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col">
+            <label for="cooling">Z klimatyzacją?</label>
+            <select multiple class="form-control" id="cooling" name="hasCoolingSystem">
+                <option selected value="">Nieistotne</option>
+                <option value="true">Tak</option>
+                <option value="false">Nie</option>
+            </select>
+        </div>
+        <div class="form-group col">
+            <label for="transmission">Typ skrzyni biegów</label>
+            <select multiple class="form-control" id="transmission" name="transmissionType">
+                <option selected value="">Nieistotne</option>
+                <option value="MANUAL">Manualna</option>
+                <option value="AUTOMATIC">Automatyczna</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-success col" type="submit">Szukaj</button>
+        <a class="btn btn-warning col" th:href="@{/cars}">Pokaż wszystkie</a>
+    </div>
+</form>
+</body>
+</html>
